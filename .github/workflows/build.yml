@@ -38,9 +38,8 @@ jobs:
       - name: Deploy CloudFormation Stack
         uses: aws-actions/aws-cloudformation-github-deploy@v1.0.3
         with:
-          name: lks-development-stack
+          name: lks-build-stack
           template: Assets/Server/Cloud/cloud.yaml
-          #parameter-overrides: 'BackendName=${{ env.BACKEND_NAME }}'
           no-fail-on-empty-changeset: "1"
       
       - uses: shallwefootball/s3-upload-action@master
@@ -48,7 +47,7 @@ jobs:
         with:
           aws_key_id: ${{ secrets.AWS_ACCESS_KEY }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_bucket: lks-sample-builds
+          aws_bucket: lks-builds
           source_dir: 'Assets/Server/Cloud/Templates'
           destination_dir: ''
       
@@ -58,7 +57,7 @@ jobs:
           go-version: 1.14.x
           stable: true
       
-      - name: Build Lambda and Cook
+      - name: Build Go Lambda and Move to Staging
         run: |
           mkdir Staging
           cd Assets/Server/Lambda/
@@ -73,8 +72,15 @@ jobs:
         with:
           aws_key_id: ${{ secrets.AWS_ACCESS_KEY }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_bucket: lks-sample-builds
+          aws_bucket: lks-builds
           source_dir: 'Staging'
           destination_dir: ''
+      
+      - name: Deploy CloudFormation Stack
+        uses: aws-actions/aws-cloudformation-github-deploy@v1.0.3
+        with:
+          name: lks-serverless-stack
+          template: Assets/Server/Cloud/serveless.yaml
+          no-fail-on-empty-changeset: "1"
 
       
