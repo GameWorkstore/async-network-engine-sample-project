@@ -15,4 +15,5 @@ Resources:
       StageName: default
       AutoDeploy: true
       ApiId: !Ref Gateway
+  
     
