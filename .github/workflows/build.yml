@@ -1,0 +1,63 @@
+name: Build
+on:
+  push:
+    branches:
+      - main
+env:
+  
+jobs:
+  awscloudformation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+        with:
+          fetch-depth: 0
+          lfs: 'false'
+      
+      - uses: paulhatch/semantic-version@v3.2
+        id: semantic
+        with:
+          branch: "main"
+          tag_prefix: ""
+          bump_each_commit: false
+      
+      - name: Run Shell Script
+        run: |
+          echo "version = ${{ steps.semantic.outputs.version }}"
+
+      #- name: Set Code Version
+        #id: codeversion
+        #env:
+          #base: 538
+        #run: |
+          #echo "::set-output name=bundleversion::$((${{ env.base }}+${{ github.run_number }}))"
+          #echo "::set-output name=version::${{ steps.semantic.outputs.version }}"
+          #echo "::set-output name=fullversion::${{ steps.semantic.outputs.version }}.$((${{ env.base }}+${{ github.run_number }}))"
+          #echo "::set-output name=version::${{ steps.semantic.outputs.version }}"
+      
+      #- name: Configure AWS credentials
+        #uses: aws-actions/configure-aws-credentials@v1
+        #with:
+          #aws-access-key-id: ${{ secrets.AWS_JENKINS_KEY_ID }}
+          #aws-secret-access-key: ${{ secrets.AWS_JENKINS_SECRET_ACCESS_KEY }}
+          #aws-region: ${{ env.AWS_REGION }}
+        
+      #- name: Deploy CloudFormation Stack
+        #uses: aws-actions/aws-cloudformation-github-deploy@v1.0.3
+        #with:
+          #name: '${{ env.BACKEND_NAME }}-builds'
+          #template: Server/GameServer/cf_builds.yaml
+          #parameter-overrides: 'BackendName=${{ env.BACKEND_NAME }}'
+          #no-fail-on-empty-changeset: "1"
+      
+      #- uses: shallwefootball/s3-upload-action@master
+        #name: Upload Templates to S3
+        #with:
+          #aws_key_id: ${{ secrets.AWS_JENKINS_KEY_ID }}
+          #aws_secret_access_key: ${{ secrets.AWS_JENKINS_SECRET_ACCESS_KEY }}
+          #aws_bucket: ${{ env.BACKEND_BUILD_BUCKET }}
+          #source_dir: 'Server/GameServer/Templates'
+          #destination_dir: ''
+  
+
