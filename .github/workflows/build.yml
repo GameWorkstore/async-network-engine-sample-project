@@ -9,8 +9,6 @@ env:
 jobs:
   awscloudformation:
     runs-on: ubuntu-latest
-    env:
-      zipname: lkslambda-${{ steps.semantic.outputs.version }}.${{ github.run_number }}.zip
     steps:
       - name: Checkout
         uses: actions/checkout@v2.3.4
@@ -66,7 +64,7 @@ jobs:
           go get -d ./...
           GOOS=linux GOARCH=amd64 go build -o lkslambda .
           chmod +X lkslambda
-          zip ../../../Staging/${{ env.zipname }} lkslambda
+          zip ../../../Staging/lkslambda-${{ steps.semantic.outputs.version }}.${{ github.run_number }}.zip lkslambda
 
       - uses: shallwefootball/s3-upload-action@master
         name: Upload Lambda to S3
@@ -82,7 +80,7 @@ jobs:
         with:
           name: lks-serverless-stack
           template: Assets/Server/Cloud/serverless.yaml
-          parameter-overrides: 'FunctionBuild=${{ env.zipname }}'
+          parameter-overrides: 'FunctionBuild=lkslambda-${{ steps.semantic.outputs.version }}.${{ github.run_number }}.zip'
           no-fail-on-empty-changeset: "1"
 
       
