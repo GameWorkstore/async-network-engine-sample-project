@@ -28,6 +28,8 @@ type Request struct {
 // GetData is a function
 func GetData(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
+	fmt.Println("GetData")
+
 	var rqt Request
 	err := json.Unmarshal([]byte(request.Body), &rqt)
 	if err != nil {
