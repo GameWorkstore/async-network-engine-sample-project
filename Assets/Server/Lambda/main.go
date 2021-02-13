@@ -13,7 +13,7 @@ func ImplementationFailure(ctx context.Context, request events.APIGatewayProxyRe
 
 	var resp = events.APIGatewayProxyResponse{}
 	resp.Body = "Implementation failure, verify if main contains the name of function"
-	resp.StatusCode = 404
+	resp.StatusCode = 200
 
 	return resp, nil
 }
