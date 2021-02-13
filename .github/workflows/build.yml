@@ -62,7 +62,7 @@ jobs:
           mkdir Staging
           cd Assets/Server/Lambda/
           go get -d ./...
-          GOOS=linux GOARCH=amd64 go build -o lkslambda .
+          GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o lkslambda .
           chmod +X lkslambda
           zip ../../../Staging/lkslambda-${{ steps.semantic.outputs.version }}.${{ github.run_number }}.zip lkslambda
 
