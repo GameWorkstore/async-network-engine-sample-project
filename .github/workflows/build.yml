@@ -43,13 +43,12 @@ jobs:
           #parameter-overrides: 'BackendName=${{ env.BACKEND_NAME }}'
           no-fail-on-empty-changeset: "1"
       
-      #- uses: shallwefootball/s3-upload-action@master
-        #name: Upload Templates to S3
-        #with:
-          #aws_key_id: ${{ secrets.AWS_JENKINS_KEY_ID }}
-          #aws_secret_access_key: ${{ secrets.AWS_JENKINS_SECRET_ACCESS_KEY }}
-          #aws_bucket: ${{ env.BACKEND_BUILD_BUCKET }}
-          #source_dir: 'Server/GameServer/Templates'
-          #destination_dir: ''
-  
+      - uses: shallwefootball/s3-upload-action@master
+        name: Upload Templates to S3
+        with:
+          aws_key_id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_bucket: lks-sample-builds
+          source_dir: 'Assets/Server/GameServer/Templates'
+          destination_dir: ''
 
