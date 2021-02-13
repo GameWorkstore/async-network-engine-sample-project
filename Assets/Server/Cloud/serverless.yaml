@@ -60,7 +60,7 @@ Resources:
     Properties:
       ApiId: !Ref Gateway
       IntegrationType: AWS_PROXY
-      IntegrationMethod: ANY
+      IntegrationMethod: POST
       IntegrationUri: !Join ['',['arn:aws:apigateway:',!Ref 'AWS::Region',':lambda:path/2015-03-31/functions/',!GetAtt FGetData.Arn,'/invocations']]
       ConnectionType: INTERNET
       PayloadFormatVersion: '1.0'
