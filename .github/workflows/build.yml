@@ -65,6 +65,7 @@ jobs:
           GOOS=linux
           GOARCH=amd64
           go build -o lkslambda .
+          chmod +X lkslambda
           zip ../../../Staging/lkslambda-${{ steps.semantic.outputs.version }}.zip lkslambda
 
       - uses: shallwefootball/s3-upload-action@master
