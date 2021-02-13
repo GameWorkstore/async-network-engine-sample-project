@@ -35,13 +35,13 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.aws-region }}
         
-      #- name: Deploy CloudFormation Stack
-        #uses: aws-actions/aws-cloudformation-github-deploy@v1.0.3
-        #with:
-          #name: '${{ env.BACKEND_NAME }}-builds'
-          #template: Server/GameServer/cf_builds.yaml
+      - name: Deploy CloudFormation Stack
+        uses: aws-actions/aws-cloudformation-github-deploy@v1.0.3
+        with:
+          name: lks-development-stack
+          template: Assets/Server/Cloud/cloud.yaml
           #parameter-overrides: 'BackendName=${{ env.BACKEND_NAME }}'
-          #no-fail-on-empty-changeset: "1"
+          no-fail-on-empty-changeset: "1"
       
       #- uses: shallwefootball/s3-upload-action@master
         #name: Upload Templates to S3
