@@ -49,6 +49,6 @@ jobs:
           aws_key_id: ${{ secrets.AWS_ACCESS_KEY }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_bucket: lks-sample-builds
-          source_dir: 'Assets/Server/GameServer/Templates'
+          source_dir: 'Assets/Server/Cloud/Templates'
           destination_dir: ''
 
