@@ -5,6 +5,7 @@ on:
       - main
 env:
   appname: sample-game
+  aws-region: 'us-east-1'
 jobs:
   awscloudformation:
     runs-on: ubuntu-latest
@@ -27,22 +28,12 @@ jobs:
           echo "version = ${{ steps.semantic.outputs.version }}"
           echo "appname = ${{ env.appname }}-${{ steps.semantic.outputs.version }}"
 
-      #- name: Set Code Version
-        #id: codeversion
-        #env:
-          #base: 538
-        #run: |
-          #echo "::set-output name=bundleversion::$((${{ env.base }}+${{ github.run_number }}))"
-          #echo "::set-output name=version::${{ steps.semantic.outputs.version }}"
-          #echo "::set-output name=fullversion::${{ steps.semantic.outputs.version }}.$((${{ env.base }}+${{ github.run_number }}))"
-          #echo "::set-output name=version::${{ steps.semantic.outputs.version }}"
-      
-      #- name: Configure AWS credentials
-        #uses: aws-actions/configure-aws-credentials@v1
-        #with:
-          #aws-access-key-id: ${{ secrets.AWS_JENKINS_KEY_ID }}
-          #aws-secret-access-key: ${{ secrets.AWS_JENKINS_SECRET_ACCESS_KEY }}
-          #aws-region: ${{ env.AWS_REGION }}
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.aws-region }}
         
       #- name: Deploy CloudFormation Stack
         #uses: aws-actions/aws-cloudformation-github-deploy@v1.0.3
