@@ -2,6 +2,7 @@ package appfunction
 
 import (
 	"context"
+	"fmt"
 	"os"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -10,6 +11,8 @@ import (
 
 // ImplementationFailure handles requests from API Gateway when function wasn't implemented properly
 func ImplementationFailure(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+
+	fmt.Println("Test")
 
 	var resp = events.APIGatewayProxyResponse{}
 	resp.Body = "Implementation failure, verify if main contains the name of function"
@@ -21,6 +24,7 @@ func ImplementationFailure(ctx context.Context, request events.APIGatewayProxyRe
 func main() {
 
 	var functionName = os.Getenv("AWS_LAMBDA_FUNCTION_NAME")
+	fmt.Println("FunctionName" + functionName)
 	switch functionName {
 	case "writedata":
 		lambda.Start(ImplementationFailure)
