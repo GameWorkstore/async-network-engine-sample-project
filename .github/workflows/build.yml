@@ -80,7 +80,7 @@ jobs:
         uses: aws-actions/aws-cloudformation-github-deploy@v1.0.3
         with:
           name: lks-serverless-stack
-          template: Assets/Server/Cloud/serveless.yaml
+          template: Assets/Server/Cloud/serverless.yaml
           no-fail-on-empty-changeset: "1"
 
       
