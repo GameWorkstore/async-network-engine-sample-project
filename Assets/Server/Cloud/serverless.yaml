@@ -1,4 +1,8 @@
 AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  FunctionBuild:
+    Type: String
+    Default: build
 Resources:
   FunctionIAM:
     Type: 'AWS::IAM::Role'
@@ -45,7 +49,7 @@ Resources:
       Role: !GetAtt FunctionIAM.Arn
       Code:
         S3Bucket: lks-builds
-        S3Key: lkslambda-0.0.1.zip
+        S3Key: !Ref FunctionBuild
   FGetDataPermission:
     Type: "AWS::Lambda::Permission"
     DependsOn:
