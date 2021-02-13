@@ -1,4 +1,4 @@
-package appfunction
+package main
 
 import (
 	"context"
