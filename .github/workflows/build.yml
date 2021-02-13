@@ -4,7 +4,7 @@ on:
     branches:
       - main
 env:
-  
+  appname: sample-game
 jobs:
   awscloudformation:
     runs-on: ubuntu-latest
@@ -25,6 +25,7 @@ jobs:
       - name: Run Shell Script
         run: |
           echo "version = ${{ steps.semantic.outputs.version }}"
+          echo "appname = ${{ env.appname }}-${{ steps.semantic.outputs.version }}"
 
       #- name: Set Code Version
         #id: codeversion
