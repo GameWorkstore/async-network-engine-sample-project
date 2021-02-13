@@ -4,4 +4,15 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: lks-sample-builds
+  Gateway:
+    Type: AWS::ApiGatewayV2::Api
+    Properties:
+      Name: lks-gateway
+      ProtocolType: HTTP
+  GatewayStage:
+    Type: AWS::ApiGatewayV2::Stage
+    Properties:
+      StageName: default
+      AutoDeploy: true
+      ApiId: !Ref Gateway
     

@@ -51,4 +51,3 @@ jobs:
           aws_bucket: lks-sample-builds
           source_dir: 'Assets/Server/Cloud/Templates'
           destination_dir: ''
-
