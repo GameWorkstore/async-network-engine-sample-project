@@ -43,6 +43,7 @@ Resources:
       KeySchema: 
         - AttributeName: "id"
           KeyType: "HASH"
+  
   # Gateway Configurations
   Gateway:
     Type: AWS::ApiGatewayV2::Api
