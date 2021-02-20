@@ -27,6 +27,23 @@ Resources:
                   - 'logs:PutLogEvents'
                   - 's3:PutObject'
                 Resource: '*'
+  # Dynamo
+  Dynamo:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      TableName: lks-users
+      AttributeDefinitions:
+        - AttributeName: "id"
+          AttributeType: "S"
+        - AttributeName: "name"
+          AttributeType: "S"
+        - AttributeName: "coins"
+          AttributeType: "N"
+      KeySchema: 
+        - AttributeName: "id"
+          KeyType: "HASH"
+  # Gateway Configurations
   Gateway:
     Type: AWS::ApiGatewayV2::Api
     Properties:
@@ -38,6 +55,7 @@ Resources:
       StageName: default
       AutoDeploy: true
       ApiId: !Ref Gateway
+  # Functions
   FGetData:
     Type: 'AWS::Lambda::Function'
     Properties:
