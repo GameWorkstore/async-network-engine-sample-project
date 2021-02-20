@@ -55,7 +55,7 @@ func GetData(ctx context.Context, request events.APIGatewayProxyRequest) (events
 	get.TableName = &tableName
 	get.Key = make(map[string]*dynamodb.AttributeValue)
 	get.Key[tableAttID] = &idAttrib
-	get.AttributesToGet = []*string{&tableAttName}
+	get.AttributesToGet = []*string{&tableAttName, &tableAttCoins}
 
 	output, err := getDynamoConnection().GetItem(&get)
 	if err != nil {
