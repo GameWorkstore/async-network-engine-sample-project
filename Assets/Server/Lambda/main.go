@@ -66,7 +66,7 @@ func GetData(ctx context.Context, request events.APIGatewayProxyRequest) (events
 	}
 
 	var resp = events.APIGatewayProxyResponse{}
-	resp.Body = "Welcome back, " + *output.Item[tableAttName].S + ", you have " + output.Item[tableAttCoins].N + " coins."
+	resp.Body = "Welcome back, " + *output.Item[tableAttName].S + ", you have " + *output.Item[tableAttCoins].N + " coins."
 	resp.StatusCode = 200
 
 	return resp, nil
