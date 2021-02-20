@@ -53,9 +53,9 @@ func GetData(ctx context.Context, request events.APIGatewayProxyRequest) (events
 
 	var get dynamodb.GetItemInput
 	get.TableName = &tableName
-	get.AttributesToGet = []*string{&tableAttName}
 	get.Key = make(map[string]*dynamodb.AttributeValue)
 	get.Key[tableAttID] = &idAttrib
+	get.AttributesToGet = []*string{&tableAttName}
 
 	output, err := getDynamoConnection().GetItem(&get)
 	if err != nil {
@@ -66,7 +66,7 @@ func GetData(ctx context.Context, request events.APIGatewayProxyRequest) (events
 	}
 
 	var resp = events.APIGatewayProxyResponse{}
-	resp.Body = "Welcome back, " + *output.Item[tableAttName].S
+	resp.Body = "Welcome back, " + *output.Item[tableAttName].S + ", you have " + output.Item[tableAttCoins].N + " coins."
 	resp.StatusCode = 200
 
 	return resp, nil
