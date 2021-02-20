@@ -25,8 +25,8 @@ Resources:
                   - 'logs:CreateLogGroup'
                   - 'logs:CreateLogStream'
                   - 'logs:PutLogEvents'
-                  - 'dynamo:PutItem'
-                  - 'dynamo:GetItem'
+                  - 'dynamodb:PutItem'
+                  - 'dynamodb:GetItem'
                 Resource: '*'
   # Dynamo
   Dynamo:
