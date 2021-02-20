@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -69,6 +70,10 @@ func SetData(ctx context.Context, request events.APIGatewayProxyRequest) (events
 	var nameAttrib dynamodb.AttributeValue
 	nameAttrib.S = &rqt.Name
 
+	var sint = strconv.Itoa(403)
+	var coinsAttrib dynamodb.AttributeValue
+	coinsAttrib.N = &sint
+
 	tableName := "lks-users"
 
 	var put dynamodb.PutItemInput
@@ -76,6 +81,7 @@ func SetData(ctx context.Context, request events.APIGatewayProxyRequest) (events
 	put.Item = make(map[string]*dynamodb.AttributeValue)
 	put.Item["id"] = &idAttrib
 	put.Item["name"] = &nameAttrib
+	put.Item["coins"] = &coinsAttrib
 
 	_, err = getDynamoConnection().PutItem(&put)
 	if err != nil {
