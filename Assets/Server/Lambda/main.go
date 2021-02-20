@@ -58,7 +58,7 @@ func SetData(ctx context.Context, request events.APIGatewayProxyRequest) (events
 	err = json.Unmarshal([]byte(request.Body), &rqt)
 	if err != nil {
 		var fail = events.APIGatewayProxyResponse{}
-		fail.Body = "Unmashal error"
+		fail.Body = "Unmashal error:" + err.Error()
 		fail.StatusCode = 200
 		return fail, nil
 	}
@@ -80,7 +80,7 @@ func SetData(ctx context.Context, request events.APIGatewayProxyRequest) (events
 	_, err = getDynamoConnection().PutItem(&put)
 	if err != nil {
 		var fail = events.APIGatewayProxyResponse{}
-		fail.Body = "Unmashal error"
+		fail.Body = "Set error:" + err.Error()
 		fail.StatusCode = 200
 		return fail, nil
 	}
