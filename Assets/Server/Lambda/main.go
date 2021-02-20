@@ -22,8 +22,13 @@ func ImplementationFailure(ctx context.Context, request events.APIGatewayProxyRe
 	return resp, nil
 }
 
-// Request is struct
-type Request struct {
+// RequestGet request input for get function
+type RequestGet struct {
+	ID string `json:"id"`
+}
+
+// RequestUpdate request input for update function
+type RequestUpdate struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`
 }
@@ -33,8 +38,9 @@ func GetData(ctx context.Context, request events.APIGatewayProxyRequest) (events
 
 	fmt.Println("GetData")
 
-	var rqt Request
-	err := json.Unmarshal([]byte(request.Body), &rqt)
+	var rqt RequestGet
+	var err error
+	err = json.Unmarshal([]byte(request.Body), &rqt)
 	if err != nil {
 		var fail = events.APIGatewayProxyResponse{}
 		fail.Body = "Unmashal error"
@@ -42,8 +48,25 @@ func GetData(ctx context.Context, request events.APIGatewayProxyRequest) (events
 		return fail, nil
 	}
 
+	var idAttrib dynamodb.AttributeValue
+	idAttrib.S = &rqt.ID
+
+	var get dynamodb.GetItemInput
+	get.TableName = &tableName
+	get.AttributesToGet = []*string{&tableAttName}
+	get.Key = make(map[string]*dynamodb.AttributeValue)
+	get.Key[tableAttID] = &idAttrib
+
+	output, err := getDynamoConnection().GetItem(&get)
+	if err != nil {
+		var fail = events.APIGatewayProxyResponse{}
+		fail.Body = "Get error:" + err.Error()
+		fail.StatusCode = 200
+		return fail, nil
+	}
+
 	var resp = events.APIGatewayProxyResponse{}
-	resp.Body = "Welcome, " + rqt.Name
+	resp.Body = "Welcome back, " + *output.Item[tableAttName].S
 	resp.StatusCode = 200
 
 	return resp, nil
@@ -54,7 +77,7 @@ func SetData(ctx context.Context, request events.APIGatewayProxyRequest) (events
 
 	fmt.Println("SetData")
 
-	var rqt Request
+	var rqt RequestUpdate
 	var err error
 	err = json.Unmarshal([]byte(request.Body), &rqt)
 	if err != nil {
@@ -74,14 +97,12 @@ func SetData(ctx context.Context, request events.APIGatewayProxyRequest) (events
 	var coinsAttrib dynamodb.AttributeValue
 	coinsAttrib.N = &sint
 
-	tableName := "lks-users"
-
 	var put dynamodb.PutItemInput
 	put.TableName = &tableName
 	put.Item = make(map[string]*dynamodb.AttributeValue)
-	put.Item["id"] = &idAttrib
-	put.Item["name"] = &nameAttrib
-	put.Item["coins"] = &coinsAttrib
+	put.Item[tableAttID] = &idAttrib
+	put.Item[tableAttName] = &nameAttrib
+	put.Item[tableAttCoins] = &coinsAttrib
 
 	_, err = getDynamoConnection().PutItem(&put)
 	if err != nil {
