@@ -69,15 +69,13 @@ func SetData(ctx context.Context, request events.APIGatewayProxyRequest) (events
 	var nameAttrib dynamodb.AttributeValue
 	nameAttrib.S = &rqt.Name
 
-	var attributes map[string]*dynamodb.AttributeValue
-	attributes["id"] = &idAttrib
-	attributes["name"] = &nameAttrib
-
 	tableName := "lks-users"
 
 	var put dynamodb.PutItemInput
 	put.TableName = &tableName
-	put.Item = attributes
+	put.Item = make(map[string]*dynamodb.AttributeValue)
+	put.Item["id"] = &idAttrib
+	put.Item["name"] = &nameAttrib
 
 	_, err = getDynamoConnection().PutItem(&put)
 	if err != nil {
