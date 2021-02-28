@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ProtocolCompilerEnabled: 1
   CSharpCompilerEnabled: 1
-  CSharpCustomPath: 
+  CSharpCustomPath: Scripts/Protobuf/
   GoLangCompilerEnabled: 1
-  GoLangCustomPath: 
+  GoLangCustomPath: Server/Lambda/

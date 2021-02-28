@@ -9,7 +9,7 @@ using UnityEngine;
 
 public class MyMono : MonoBehaviour
 {
-    private const string GetEndpoint = "http";
+    private const string GetEndpoint = "https://ryigmkqwt6.execute-api.us-east-1.amazonaws.com/default/lksgetdata";
 
     void Start()
     {
@@ -26,8 +26,7 @@ public class MyMono : MonoBehaviour
     private void OnGetUserResponse(AsyncNetworkResult result, GetUserResponse response, GenericErrorResponse error)
     {
         Debug.Log("Result:" + result);
-        Debug.Log("Response:" + response != null? response.ToString() : "null" );
-        Debug.Log("Result:" + error != null? error.ToString() : "null");
-
+        Debug.Log("Response:" + (response != null? response.ToString() : "null"));
+        Debug.Log("Result:" + (error != null? error.ToString() : "null"));
     }
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"os"
 	"strconv"
@@ -54,6 +55,10 @@ func GetData(ctx context.Context, request events.APIGatewayProxyRequest) (events
 	output, err := getDynamoConnection().GetItem(&get)
 	if err != nil {
 		return ase.AWSError(ase.Transmission_InternalHandlerError, err)
+	}
+
+	if output.Item == nil {
+		return ase.AWSError(ase.Transmission_InternalHandlerError, errors.New("user doesn't exist"))
 	}
 
 	coins, err := strconv.Atoi(*output.Item[tableAttCoins].N)
