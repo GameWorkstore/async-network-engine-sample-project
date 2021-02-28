@@ -1,7 +1,31 @@
 {
   "dependencies": {
+    "com.gameworkstore.asyncnetworkengine": {
+      "version": "git://github.com/GameWorkstore/async-network-engine.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.gameworkstore.googleprotobufunity": "3.15.2",
+        "com.gameworkstore.patterns": "1.0.6"
+      },
+      "hash": "5ced27dc69652a35f82248f5b4b58449c40f8c41"
+    },
+    "com.gameworkstore.googleprotobufunity": {
+      "version": "git://github.com/GameWorkstore/google-protobuf-unity.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "f628492878c8d9c3a2c02dfe3f071a90d1f13135"
+    },
+    "com.gameworkstore.patterns": {
+      "version": "git://github.com/GameWorkstore/patterns.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "fa6c06db14bfc1a5b1473e6e5067f3f5d6ed1d46"
+    },
     "com.unity.2d.animation": {
-      "version": "5.0.3",
+      "version": "5.0.4",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -55,7 +79,7 @@
       "dependencies": {}
     },
     "com.unity.2d.spriteshape": {
-      "version": "5.1.0",
+      "version": "5.1.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -116,8 +140,24 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.unity.sysroot": {
+      "version": "0.1.19-preview",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.sysroot.linux-x86_64": {
+      "version": "0.1.14-preview",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.sysroot": "0.1.18-preview"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.test-framework": {
-      "version": "1.1.20",
+      "version": "1.1.22",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -137,7 +177,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.timeline": {
-      "version": "1.4.4",
+      "version": "1.4.6",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -145,6 +185,16 @@
         "com.unity.modules.animation": "1.0.0",
         "com.unity.modules.audio": "1.0.0",
         "com.unity.modules.particlesystem": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.toolchain.macos-x86_64-linux-x86_64": {
+      "version": "0.1.20-preview",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.sysroot": "0.1.19-preview",
+        "com.unity.sysroot.linux-x86_64": "0.1.14-preview"
       },
       "url": "https://packages.unity.com"
     },

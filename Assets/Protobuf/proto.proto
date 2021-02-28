@@ -1,0 +1,32 @@
+syntax = "proto3";
+option optimize_for = LITE_RUNTIME;
+option go_package = "example.com/mygithub/myrepo;main";
+
+package ProtobufData;
+
+message User
+{
+   string Id = 1;
+   string Name = 2;
+   int32 Coins = 3;
+}
+
+message GetUserRequest
+{
+   string Id = 1;
+}
+
+message GetUserResponse
+{
+   User user = 1;
+}
+
+message SetUserRequest
+{
+   User user = 1;
+}
+
+message SetUserResponse
+{
+   bool HasCreated = 1;
+}

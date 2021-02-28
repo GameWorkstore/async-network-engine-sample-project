@@ -2,11 +2,11 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"os"
 	"strconv"
 
+	ase "github.com/GameWorkstore/async-network-engine-go"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
@@ -22,34 +22,28 @@ func ImplementationFailure(ctx context.Context, request events.APIGatewayProxyRe
 	return resp, nil
 }
 
-// RequestGet request input for get function
-type RequestGet struct {
-	ID string `json:"id"`
-}
-
-// RequestUpdate request input for update function
-type RequestUpdate struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
-}
-
 // GetData is a function
 func GetData(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
-	fmt.Println("GetData")
+	fmt.Println("GetData:1")
 
-	var rqt RequestGet
-	var err error
-	err = json.Unmarshal([]byte(request.Body), &rqt)
-	if err != nil {
-		var fail = events.APIGatewayProxyResponse{}
-		fail.Body = "Unmashal error"
-		fail.StatusCode = 200
-		return fail, nil
+	// Cross-Origin Domain - WebGL
+	respOptions, shouldStop := ase.AWSPreFlight(request)
+	if shouldStop {
+		return respOptions, nil
 	}
 
+	var rqt = GetUserRequest{}
+	err := ase.AWSDecode(request, &rqt)
+	if err != nil {
+		return ase.AWSError(ase.Transmission_MarshalDecodeError, err)
+	}
+
+	// Process
+	fmt.Println("GetData:2")
+
 	var idAttrib dynamodb.AttributeValue
-	idAttrib.S = &rqt.ID
+	idAttrib.S = &rqt.Id
 
 	var get dynamodb.GetItemInput
 	get.TableName = &tableName
@@ -59,43 +53,50 @@ func GetData(ctx context.Context, request events.APIGatewayProxyRequest) (events
 
 	output, err := getDynamoConnection().GetItem(&get)
 	if err != nil {
-		var fail = events.APIGatewayProxyResponse{}
-		fail.Body = "Get error:" + err.Error()
-		fail.StatusCode = 200
-		return fail, nil
+		return ase.AWSError(ase.Transmission_InternalHandlerError, err)
 	}
 
-	var resp = events.APIGatewayProxyResponse{}
-	resp.Body = "Welcome back, " + *output.Item[tableAttName].S + ", you have " + *output.Item[tableAttCoins].N + " coins."
-	resp.StatusCode = 200
+	coins, err := strconv.Atoi(*output.Item[tableAttCoins].N)
+	if err != nil {
+		return ase.AWSError(ase.Transmission_InternalHandlerError, err)
+	}
 
-	return resp, nil
+	resp := GetUserResponse{}
+	resp.User.Id = rqt.Id
+	resp.User.Name = *output.Item[tableAttName].S
+	resp.User.Coins = int32(coins)
+
+	return ase.AWSResponse(&resp)
 }
 
 // SetData is a function
 func SetData(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
-	fmt.Println("SetData")
+	fmt.Println("SetData:1")
 
-	var rqt RequestUpdate
-	var err error
-	err = json.Unmarshal([]byte(request.Body), &rqt)
-	if err != nil {
-		var fail = events.APIGatewayProxyResponse{}
-		fail.Body = "Unmashal error:" + err.Error()
-		fail.StatusCode = 200
-		return fail, nil
+	// Cross-Origin Domain - WebGL
+	respOptions, shouldStop := ase.AWSPreFlight(request)
+	if shouldStop {
+		return respOptions, nil
 	}
 
+	var rqt = SetUserRequest{}
+	err := ase.AWSDecode(request, &rqt)
+	if err != nil {
+		return ase.AWSError(ase.Transmission_MarshalDecodeError, err)
+	}
+
+	fmt.Println("SetData:2")
+
 	var idAttrib dynamodb.AttributeValue
-	idAttrib.S = &rqt.ID
+	idAttrib.S = &rqt.User.Id
 
 	var nameAttrib dynamodb.AttributeValue
-	nameAttrib.S = &rqt.Name
+	nameAttrib.S = &rqt.User.Name
 
-	var sint = strconv.Itoa(403)
+	var coins = strconv.Itoa(int(rqt.User.Coins))
 	var coinsAttrib dynamodb.AttributeValue
-	coinsAttrib.N = &sint
+	coinsAttrib.N = &coins
 
 	var put dynamodb.PutItemInput
 	put.TableName = &tableName
@@ -106,17 +107,13 @@ func SetData(ctx context.Context, request events.APIGatewayProxyRequest) (events
 
 	_, err = getDynamoConnection().PutItem(&put)
 	if err != nil {
-		var fail = events.APIGatewayProxyResponse{}
-		fail.Body = "Set error:" + err.Error()
-		fail.StatusCode = 200
-		return fail, nil
+		return ase.AWSError(ase.Transmission_InternalHandlerError, err)
 	}
 
-	var resp = events.APIGatewayProxyResponse{}
-	resp.Body = "Updated, " + rqt.Name
-	resp.StatusCode = 200
+	resp := SetUserResponse{}
+	resp.HasCreated = true
 
-	return resp, nil
+	return ase.AWSResponse(&resp)
 }
 
 func main() {
