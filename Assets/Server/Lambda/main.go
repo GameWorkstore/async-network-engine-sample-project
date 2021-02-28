@@ -66,10 +66,13 @@ func GetData(ctx context.Context, request events.APIGatewayProxyRequest) (events
 		return ase.AWSError(ase.Transmission_InternalHandlerError, err)
 	}
 
+	user := User{}
+	user.Id = rqt.Id
+	user.Name = *output.Item[tableAttName].S
+	user.Coins = int32(coins)
+
 	resp := GetUserResponse{}
-	resp.User.Id = rqt.Id
-	resp.User.Name = *output.Item[tableAttName].S
-	resp.User.Coins = int32(coins)
+	resp.User = &user
 
 	return ase.AWSResponse(&resp)
 }
